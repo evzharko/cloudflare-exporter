@@ -225,6 +225,7 @@ type zoneResp struct {
 			EdgeResponseStatus    uint16 `json:"edgeResponseStatus"`
 			ClientCountryName     string `json:"clientCountryName"`
 			ClientRequestHTTPHost string `json:"clientRequestHTTPHost"`
+		    botManagementDecision string `json:"botManagementDecision"`
 		} `json:"dimensions"`
 	} `json:"httpRequestsEdgeCountryHost"`
 
@@ -540,6 +541,7 @@ query ($zoneIDs: [String!], $mintime: Time!, $maxtime: Time!, $limit: Int!) {
 					originResponseStatus
 					clientCountryName
 					clientRequestHTTPHost
+					botManagementDecision
 				}
 			}
 			httpRequestsEdgeCountryHost: httpRequestsAdaptiveGroups(limit: $limit, filter: { datetime_geq: $mintime, datetime_lt: $maxtime, requestSource_in: ["eyeball"] }) {
