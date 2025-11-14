@@ -216,6 +216,7 @@ type zoneResp struct {
 			OriginResponseStatus  uint16 `json:"originResponseStatus"`
 			ClientCountryName     string `json:"clientCountryName"`
 			ClientRequestHTTPHost string `json:"clientRequestHTTPHost"`
+			BotManagementDecision string `json:"botManagementDecision"`
 		} `json:"dimensions"`
 	} `json:"httpRequestsAdaptiveGroups"`
 
@@ -225,7 +226,6 @@ type zoneResp struct {
 			EdgeResponseStatus    uint16 `json:"edgeResponseStatus"`
 			ClientCountryName     string `json:"clientCountryName"`
 			ClientRequestHTTPHost string `json:"clientRequestHTTPHost"`
-		    botManagementDecision string `json:"botManagementDecision"`
 		} `json:"dimensions"`
 	} `json:"httpRequestsEdgeCountryHost"`
 
@@ -550,6 +550,7 @@ query ($zoneIDs: [String!], $mintime: Time!, $maxtime: Time!, $limit: Int!) {
 					edgeResponseStatus
 					clientCountryName
 					clientRequestHTTPHost
+					botManagementDecision
 				}
 			}
 			healthCheckEventsAdaptiveGroups(limit: $limit, filter: { datetime_geq: $mintime, datetime_lt: $maxtime }) {

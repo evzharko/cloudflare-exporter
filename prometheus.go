@@ -60,6 +60,7 @@ const (
 	tunnelHealthStatusMetricName                 MetricName = "cloudflare_tunnel_health_status"
 	tunnelConnectorInfoMetricName                MetricName = "cloudflare_tunnel_connector_info"
 	tunnelConnectorActiveConnectionsMetricName   MetricName = "cloudflare_tunnel_connector_active_connections"
+	botManagementDecision                        MetricName = "cloudflare_botManagementDecision"
 )
 
 type MetricsSet map[MetricName]struct{}
@@ -120,7 +121,7 @@ var (
 	zoneRequestOriginStatusCountryHost = prometheus.NewCounterVec(prometheus.CounterOpts{
 		Name: zoneRequestOriginStatusCountryHostMetricName.String(),
 		Help: "Count of not cached requests for zone per origin HTTP status per country per host",
-	}, []string{"zone", "account", "status", "country", "host"},
+	}, []string{"zone", "account", "status", "country", "host", "bot"},
 	)
 
 	zoneRequestStatusCountryHost = prometheus.NewCounterVec(prometheus.CounterOpts{
@@ -158,6 +159,12 @@ var (
 		Help: "Bandwidth per country per zone",
 	}, []string{"zone", "account", "country", "region"},
 	)
+
+	// 	botManagementDecision = prometheus.NewCounterVec(prometheus.CounterOpts{
+	//     		Name: botManagementDecision.String(),
+	//     		Help: "isBotManager check",
+	//     	}, []string{"zone", "account", "country", "region"},
+	//     	)
 
 	zoneThreatsTotal = prometheus.NewCounterVec(prometheus.CounterOpts{
 		Name: zoneThreatsTotalMetricName.String(),
@@ -795,6 +802,7 @@ func addHTTPAdaptiveGroups(z *zoneResp, name string, account string) {
 				"status":  strconv.Itoa(int(g.Dimensions.OriginResponseStatus)),
 				"country": g.Dimensions.ClientCountryName,
 				"host":    g.Dimensions.ClientRequestHTTPHost,
+				"bot":     g.Dimensions.BotManagementDecision,
 			}).Add(float64(g.Count))
 	}
 
