@@ -217,6 +217,7 @@ type zoneResp struct {
 			ClientCountryName     string `json:"clientCountryName"`
 			ClientRequestHTTPHost string `json:"clientRequestHTTPHost"`
 			BotManagementDecision string `json:"botManagementDecision"`
+			CacheStatus           string `json:"cacheStatus"`
 		} `json:"dimensions"`
 	} `json:"httpRequestsAdaptiveGroups"`
 
@@ -535,13 +536,14 @@ query ($zoneIDs: [String!], $mintime: Time!, $maxtime: Time!, $limit: Int!) {
 				  clientCountryName
 				}
 			}
-			httpRequestsAdaptiveGroups(limit: $limit, filter: { datetime_geq: $mintime, datetime_lt: $maxtime, cacheStatus_notin: ["hit"] }) {
+			httpRequestsAdaptiveGroups(limit: $limit, filter: { datetime_geq: $mintime, datetime_lt: $maxtime}) {
 				count
 				dimensions {
 					originResponseStatus
 					clientCountryName
 					clientRequestHTTPHost
 					botManagementDecision
+					cacheStatus
 				}
 			}
 			httpRequestsEdgeCountryHost: httpRequestsAdaptiveGroups(limit: $limit, filter: { datetime_geq: $mintime, datetime_lt: $maxtime, requestSource_in: ["eyeball"] }) {
@@ -550,7 +552,6 @@ query ($zoneIDs: [String!], $mintime: Time!, $maxtime: Time!, $limit: Int!) {
 					edgeResponseStatus
 					clientCountryName
 					clientRequestHTTPHost
-					botManagementDecision
 				}
 			}
 			healthCheckEventsAdaptiveGroups(limit: $limit, filter: { datetime_geq: $mintime, datetime_lt: $maxtime }) {
